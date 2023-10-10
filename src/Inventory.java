@@ -1,34 +1,52 @@
 import inventory_exceptions.InsufficientStockException;
 import inventory_exceptions.ItemNotFoundException;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class Inventory {
-    List<Item> items = new ArrayList<>();
+public class Inventory<T extends Item> {
+    List<T> items = new ArrayList<>();
 
-    public void addItem(Item item){
+    public void addItem(T item){
         try {
-            Item existingItem = getItemByName(item.getName());
+            T existingItem = getItemByName(item.getName());
             existingItem.setQuantity(existingItem.getQuantity()+item.getQuantity());
         }catch (ItemNotFoundException ex){
             items.add(item);
         }
     }
 
-    public void addItem(String itemName, int itemQuantity){
+    public void addItem(String itemName, int itemQuantity, Class<T> cls) {
         try {
-            Item existingItem = getItemByName(itemName);
+            T existingItem = getItemByName(itemName);
             existingItem.setQuantity(existingItem.getQuantity()+itemQuantity);
         }catch (ItemNotFoundException ex){
-            items.add(new Item(itemName, itemQuantity));
+            T item = null;
+            try {
+                item = cls.getDeclaredConstructor(String.class, int.class).newInstance(itemName, itemQuantity);
+            } catch (InstantiationException | NoSuchMethodException | IllegalAccessException |
+                     InvocationTargetException e) {
+                System.out.println(e.getMessage());
+            }
+            items.add(item);
         }
     }
 
-    public Item getItemByName(String name) throws ItemNotFoundException {
+    public void printInventory(){
+        StringBuilder str = new StringBuilder();
+            for (T item : items) {
+                if(item!=null) {
+                    str.append(item.printDetails()).append(System.lineSeparator());
+                }
+            }
+            System.out.println(str.toString());
+    }
+
+    public T getItemByName(String name) throws ItemNotFoundException {
         try {
-            return items.stream().filter(Item -> Item.getName().equals(name)).findFirst().get();
+            return items.stream().filter(T -> T.getName().equals(name)).findFirst().get();
         }catch (NoSuchElementException ex){
             throw new ItemNotFoundException("Item not found.");
         }
@@ -36,7 +54,7 @@ public class Inventory {
 
 
     public void removeItem(String itemName, int itemQuantity) throws InsufficientStockException {
-        Item existingItem;
+        T existingItem;
         try {
             existingItem = getItemByName(itemName);
             if(existingItem.getQuantity()<itemQuantity){

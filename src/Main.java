@@ -1,22 +1,30 @@
 import inventory_exceptions.InsufficientStockException;
-import inventory_exceptions.ItemNotFoundException;
+
+import java.lang.reflect.InvocationTargetException;
 
 public class Main {
     public static void main(String[] args) {
-        Inventory myInventory = new Inventory();
-        Item item1 = new Item("milk", 3);
+        Inventory<FoodItem> myInventory = new Inventory<>();
+        FoodItem item1 = new FoodItem("milk", 3);
         myInventory.addItem(item1);
-        myInventory.addItem("bread", 2);
-        myInventory.addItem("milk", 4);
+        Inventory<ElectronicsItem> electroInventory = new Inventory<>();
+
+        electroInventory.addItem("toaster", 3, ElectronicsItem.class);
+        myInventory.addItem("bread", 2, FoodItem.class);
+        myInventory.addItem("milk", 4, FoodItem.class);
+        myInventory.printInventory();
+        electroInventory.printInventory();
         try {
             myInventory.removeItem("meat", 1);
         } catch (InsufficientStockException ex) {
             System.out.println(ex.getMessage());
         }
         try {
+            myInventory.removeItem("bread", 1);
             myInventory.removeItem("bread", 3);
         } catch (InsufficientStockException ex) {
             System.out.println(ex.getMessage());
         }
+        myInventory.printInventory();
     }
 }
