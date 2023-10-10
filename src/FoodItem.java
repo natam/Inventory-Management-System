@@ -1,3 +1,5 @@
+import inventory_exceptions.InsufficientStockException;
+
 public class FoodItem implements Item{
     private String id;
     private String name;
@@ -47,5 +49,14 @@ public class FoodItem implements Item{
 
     public void setQuantity(int quantity) {
         this.quantity = (quantity>=0)?quantity:0;
+    }
+
+    @Override
+    public void decreaseQuantity(int quantityToRemove) throws InsufficientStockException {
+        if(quantity<quantityToRemove){
+            throw new InsufficientStockException("Not enough items in stock.");
+        }else {
+            setQuantity(quantity - quantityToRemove);
+        }
     }
 }

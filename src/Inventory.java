@@ -53,16 +53,12 @@ public class Inventory<T extends Item> {
     }
 
 
-    public void removeItem(String itemName, int itemQuantity) throws InsufficientStockException {
+    public void removeItem(String itemName, int itemQuantity) {
         T existingItem;
         try {
             existingItem = getItemByName(itemName);
-            if(existingItem.getQuantity()<itemQuantity){
-                throw new InsufficientStockException("Not enough items in stock.");
-            }else {
-                existingItem.setQuantity(existingItem.getQuantity() - itemQuantity);
-            }
-        }catch (ItemNotFoundException ex){
+            existingItem.decreaseQuantity(itemQuantity);
+        }catch (ItemNotFoundException | InsufficientStockException ex){
             System.out.println(ex.getMessage());
         }
     }

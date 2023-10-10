@@ -1,13 +1,15 @@
+import inventory_exceptions.InsufficientStockException;
+
 public class ElectronicsItem implements Item{
     private String id;
     private String name;
     private int quantity;
 
-//    public ElectronicsItem(String name, int quantity) {
-//        setId();
-//        setName(name);
-//        setQuantity(quantity);
-//    }
+    public ElectronicsItem(String name, int quantity) {
+        setId();
+        setName(name);
+        setQuantity(quantity);
+    }
 
     public ElectronicsItem(String name) {
         setId();
@@ -47,5 +49,14 @@ public class ElectronicsItem implements Item{
 
     public void setQuantity(int quantity) {
         this.quantity = (quantity>=0)?quantity:0;
+    }
+
+    @Override
+    public void decreaseQuantity(int quantityToRemove) throws InsufficientStockException {
+        if(quantity<quantityToRemove){
+            throw new InsufficientStockException("Not enough items in stock.");
+        }else {
+            setQuantity(quantity - quantityToRemove);
+        }
     }
 }

@@ -14,17 +14,9 @@ public class Main {
         myInventory.addItem("milk", 4, FoodItem.class);
         myInventory.printInventory();
         electroInventory.printInventory();
-        try {
-            myInventory.removeItem("meat", 1);
-        } catch (InsufficientStockException ex) {
-            System.out.println(ex.getMessage());
-        }
-        try {
-            myInventory.removeItem("bread", 1);
-            myInventory.removeItem("bread", 3);
-        } catch (InsufficientStockException ex) {
-            System.out.println(ex.getMessage());
-        }
+        myInventory.removeItem("meat", 1);
+        myInventory.removeItem("bread", 1);
+        myInventory.removeItem("bread", 3);
         myInventory.printInventory();
     }
 }
