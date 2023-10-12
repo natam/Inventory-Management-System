@@ -1,7 +1,3 @@
-import inventory_exceptions.InsufficientStockException;
-
-import java.lang.reflect.InvocationTargetException;
-
 public class Main {
     public static void main(String[] args) {
         Inventory<FoodItem> myInventory = new Inventory<>();
