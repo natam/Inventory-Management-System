@@ -55,8 +55,8 @@ public class FoodItem implements Item{
     public void decreaseQuantity(int quantityToRemove) throws InsufficientStockException {
         if(quantity<quantityToRemove){
             throw new InsufficientStockException("Not enough items in stock.");
-        }else {
-            setQuantity(quantity - quantityToRemove);
+        }else if(quantityToRemove>0){
+                setQuantity(quantity - quantityToRemove);
         }
     }
 }
