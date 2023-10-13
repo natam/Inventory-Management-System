@@ -5,9 +5,9 @@ public class Main {
         myInventory.addItem(item1);
         Inventory<ElectronicsItem> electroInventory = new Inventory<>();
 
-        electroInventory.addItem("toaster", 3, ElectronicsItem.class);
-        myInventory.addItem("bread", 2, FoodItem.class);
-        myInventory.addItem("milk", 4, FoodItem.class);
+        electroInventory.addItem("toaster", 3, ElectronicsItem::new);
+        myInventory.addItem("bread", 2, FoodItem::new);
+        myInventory.addItem("milk", 4, FoodItem::new);
         myInventory.printInventory();
         electroInventory.printInventory();
         myInventory.removeItem("meat", 1);

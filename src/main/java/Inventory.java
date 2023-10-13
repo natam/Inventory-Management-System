@@ -1,7 +1,6 @@
 import inventory_exceptions.InsufficientStockException;
 import inventory_exceptions.ItemNotFoundException;
-
-import java.lang.reflect.InvocationTargetException;
+import java.util.function.BiFunction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -18,18 +17,12 @@ public class Inventory<T extends Item> {
         }
     }
 
-    public void addItem(String itemName, int itemQuantity, Class<T> cls) {
+    public void addItem(String itemName, int itemQuantity, BiFunction<String, Integer, T> itemFactory) {
         try {
             T existingItem = getItemByName(itemName);
             existingItem.setQuantity(existingItem.getQuantity()+itemQuantity);
         }catch (ItemNotFoundException ex){
-            T item = null;
-            try {
-                item = cls.getDeclaredConstructor(String.class, int.class).newInstance(itemName, itemQuantity);
-            } catch (InstantiationException | NoSuchMethodException | IllegalAccessException |
-                     InvocationTargetException e) {
-                System.out.println(e.getMessage());
-            }
+            T item = itemFactory.apply(itemName, itemQuantity);;
             items.add(item);
         }
     }

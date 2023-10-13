@@ -1,10 +1,7 @@
 import inventory_exceptions.ItemNotFoundException;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -46,8 +43,8 @@ class InventoryTest {
     @Test
     void testAddItemThatNotPresentInList() {
         Inventory<FoodItem> testInv = new Inventory<>();
-        testInv.addItem("Tea", 4, FoodItem.class);
-        testInv.addItem("Coffee", 10, FoodItem.class);
+        testInv.addItem("Tea", 4, FoodItem::new);
+        testInv.addItem("Coffee", 10, FoodItem::new);
         assertEquals(2, testInv.items.size());
         assertEquals(4, testInv.items.get(0).getQuantity());
         assertEquals("Tea", testInv.items.get(0).getName());
@@ -60,8 +57,8 @@ class InventoryTest {
     @Test
     void testAddItemThatPresentInList() {
         Inventory<FoodItem> testInv = new Inventory<>();
-        testInv.addItem("Tea", 4, FoodItem.class);
-        testInv.addItem("Tea", 10, FoodItem.class);
+        testInv.addItem("Tea", 4, FoodItem::new);
+        testInv.addItem("Tea", 10, FoodItem::new);
         assertEquals(1, testInv.items.size());
         assertEquals(14, testInv.items.get(0).getQuantity());
         assertEquals("Tea", testInv.items.get(0).getName());
